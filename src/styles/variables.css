@@ -1,0 +1,27 @@
+:root {
+  --brand-red: #cf1f26;
+  --brand-red-dark: #9f1219;
+  --brand-red-bright: #e5262e;
+  --brand-red-soft: #fff0f0;
+  --white: #ffffff;
+  --ink: #171717;
+  --ink-soft: #343434;
+  --muted: #6d6868;
+  --line: #e9e4e2;
+  --surface: #f7f5f3;
+  --surface-warm: #f0ece9;
+  --success: #1f9d5a;
+  --whatsapp: #25d366;
+  --whatsapp-hover: #1ebe5d;
+  --whatsapp-dark: #128c7e;
+  --max-width: 1280px;
+  --header-height: 78px;
+  --font-display: "Arial Black", "Helvetica Neue", Arial, sans-serif;
+  --font-sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --shadow-soft: 0 24px 60px rgba(33, 15, 15, 0.1);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
