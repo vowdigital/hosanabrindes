@@ -156,10 +156,6 @@
     height: 360px;
   }
 
-  .client-marks__grid {
-    grid-template-columns: repeat(5, 1fr);
-  }
-
   .quote-builder__grid {
     grid-template-columns: minmax(300px, 0.72fr) minmax(0, 1.28fr);
     gap: 50px;
@@ -473,13 +469,11 @@
     border-width: 52px;
   }
 
-  .production__image--back {
-    width: 68%;
-  }
-
-  .production__image--front {
-    right: 3%;
-    width: 42%;
+  .production__image--active {
+    top: 7%;
+    left: 6%;
+    width: 88%;
+    height: 86%;
   }
 
   .needs__heading {
@@ -517,9 +511,24 @@
     margin-top: 45px;
   }
 
-  .client-marks__grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
+  .client-marks > p {
+    margin-bottom: 24px;
+  }
+
+  .client-marks__viewport {
+    padding-block: 18px;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  }
+
+  .client-marks__track {
+    animation-duration: 22s;
+  }
+
+  .client-mark {
+    width: 175px;
+    height: 125px;
+    padding: 10px;
   }
 
   .portfolio__heading {

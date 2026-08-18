@@ -1,49 +1,71 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import { assetUrl } from '../lib/assets'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
-gsap.registerPlugin(ScrollTrigger, useGSAP)
-
 const techniques = [
-  ['Silk screen', 'Aplicação versátil para cores sólidas e comunicação de marca.'],
-  ['Degradê', 'Transições de cor que transformam o produto em uma peça visual.'],
-  ['Gravação a laser', 'Acabamento preciso e durável para itens em inox.'],
-  ['Metalizado', 'Presença e brilho para ações com maior valor percebido.'],
-  ['DTF', 'Detalhamento para diferentes superfícies e propostas criativas.'],
+  {
+    name: 'Silk screen',
+    description: 'Aplicação versátil para cores sólidas e comunicação de marca.',
+    image: 'AZUL CLARO.png',
+    alt: 'Bolsa azul-clara usada como referência para aplicação em silk screen',
+  },
+  {
+    name: 'Degradê',
+    description: 'Transições de cor que transformam o produto em uma peça visual.',
+    image: 'gb001 verde - azul.png',
+    alt: 'Caneca com acabamento em degradê verde e azul',
+  },
+  {
+    name: 'Gravação a laser',
+    description: 'Acabamento preciso e durável para itens em inox.',
+    image: 'Garrafa térmica preta.png',
+    alt: 'Garrafa térmica preta usada como referência para gravação a laser',
+  },
+  {
+    name: 'Metalizado',
+    description: 'Presença e brilho para ações com maior valor percebido.',
+    image: 'Garrafa térmica dourada.png',
+    alt: 'Garrafa térmica dourada com acabamento metalizado',
+  },
+  {
+    name: 'DTF',
+    description: 'Detalhamento para diferentes superfícies e propostas criativas.',
+    image: 'G3.png',
+    alt: 'Copo de gin rosa usado como referência provisória para personalização DTF',
+  },
 ]
 
 export const Production = () => {
   const scope = useRef<HTMLElement>(null)
+  const image = useRef<HTMLImageElement>(null)
   const [active, setActive] = useState(0)
   const reducedMotion = useReducedMotion()
 
+  useEffect(() => {
+    techniques.forEach((technique) => {
+      const preload = new Image()
+      preload.src = assetUrl(technique.image)
+    })
+  }, [])
+
   useGSAP(() => {
-    if (reducedMotion) return
-    gsap.from('.production__image--front', {
-      y: 90,
-      rotate: 4,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: scope.current,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 0.8,
-      },
+    if (reducedMotion || !image.current) return
+    gsap.fromTo(image.current, {
+      autoAlpha: 0,
+      x: -110,
+      rotate: -3,
+    }, {
+      autoAlpha: 1,
+      x: 0,
+      rotate: 0,
+      duration: 0.72,
+      ease: 'power3.out',
     })
-    gsap.from('.production__image--back', {
-      y: -45,
-      ease: 'none',
-      scrollTrigger: {
-        trigger: scope.current,
-        start: 'top bottom',
-        end: 'bottom top',
-        scrub: 0.8,
-      },
-    })
-  }, { scope, dependencies: [reducedMotion], revertOnUpdate: true })
+  }, { scope, dependencies: [active, reducedMotion], revertOnUpdate: true })
+
+  const activeTechnique = techniques[active]
 
   return (
     <section className="section production" id="producao" ref={scope}>
@@ -59,37 +81,28 @@ export const Production = () => {
         <div className="production__art" data-reveal="clip">
           <div className="production__ring" aria-hidden="true" />
           <img
-            className="production__image production__image--back"
-            src={assetUrl('gb001 verde - azul.png')}
+            className="production__image production__image--active"
+            src={assetUrl(activeTechnique.image)}
+            ref={image}
+            key={activeTechnique.image}
             loading="lazy"
             decoding="async"
-            width="2106"
-            height="2402"
-            alt="Caneca com acabamento metalizado em degradê verde e azul"
-          />
-          <img
-            className="production__image production__image--front"
-            src={assetUrl('Garrafa térmica preta.png')}
-            loading="lazy"
-            decoding="async"
-            width="933"
-            height="2577"
-            alt="Garrafa térmica preta adequada para gravação a laser"
+            alt={activeTechnique.alt}
           />
           <span className="production__art-label">Feito em Maringá<br />para todo o Brasil</span>
         </div>
 
         <div className="production__techniques">
-          {techniques.map(([name, description], index) => (
+          {techniques.map((technique, index) => (
             <button
               type="button"
               className={active === index ? 'is-active' : ''}
-              key={name}
+              key={technique.name}
               onClick={() => setActive(index)}
               aria-pressed={active === index}
             >
               <span>0{index + 1}</span>
-              <span><strong>{name}</strong><small>{description}</small></span>
+              <span><strong>{technique.name}</strong><small>{technique.description}</small></span>
             </button>
           ))}
         </div>

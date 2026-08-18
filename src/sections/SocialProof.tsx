@@ -38,14 +38,20 @@ export const SocialProof = () => (
       </figure>
     </div>
 
-    <div className="container client-marks" data-reveal>
-      <p>+18 mil clientes atendidos · algumas marcas que já estiveram em nossa produção</p>
-      <div className="client-marks__grid">
-        {clientMarks.map((mark) => (
-          <div className="client-mark" key={mark.name} title={mark.name}>
-            <img src={mark.image} loading="lazy" decoding="async" alt={`Marca ${mark.name}`} />
-          </div>
-        ))}
+    <div className="client-marks" data-reveal>
+      <p className="container">+18 mil clientes atendidos · algumas marcas que já estiveram em nossa produção</p>
+      <div className="client-marks__viewport">
+        <div className="client-marks__track">
+          {[0, 1].map((copy) => (
+            <div className="client-marks__group" key={copy} aria-hidden={copy === 1 || undefined}>
+              {clientMarks.map((mark) => (
+                <div className="client-mark" key={`${copy}-${mark.name}`} title={copy === 0 ? mark.name : undefined}>
+                  <img src={mark.image} loading="lazy" decoding="async" alt={copy === 0 ? `Marca ${mark.name}` : ''} />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   </section>
