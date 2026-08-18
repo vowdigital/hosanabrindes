@@ -9,8 +9,6 @@ import { Production } from './sections/Production'
 import { Needs } from './sections/Needs'
 import { SocialProof } from './sections/SocialProof'
 import { Portfolio } from './sections/Portfolio'
-import { Process } from './sections/Process'
-import { QuoteBuilder } from './sections/QuoteBuilder'
 import { FinalCTA } from './sections/FinalCTA'
 import { FAQSection } from './sections/FAQSection'
 import { Footer } from './sections/Footer'
@@ -35,8 +33,6 @@ function App() {
           <Needs />
           <SocialProof />
           <Portfolio />
-          <Process />
-          <QuoteBuilder />
           <FinalCTA />
           <FAQSection />
         </main>

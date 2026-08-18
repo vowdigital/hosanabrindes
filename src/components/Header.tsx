@@ -6,7 +6,6 @@ import { WhatsAppButton } from './WhatsAppButton'
 const links = [
   ['Produtos', '#produtos'],
   ['Diferenciais', '#producao'],
-  ['Como funciona', '#processo'],
   ['Avaliações', '#avaliacoes'],
   ['FAQ', '#faq'],
 ]
