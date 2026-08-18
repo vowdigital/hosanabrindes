@@ -131,7 +131,7 @@
   }
 
   .acrylic-feature__media {
-    height: 560px;
+    height: 550px;
   }
 
   .production__grid {
@@ -213,6 +213,10 @@
     grid-template-columns: 1fr;
   }
 
+  .acrylic-feature__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
   .products__intro,
   .quote-builder__intro {
     position: static;
@@ -232,7 +236,8 @@
 
   .acrylic-feature__media {
     order: 2;
-    height: 570px;
+    height: min(680px, 82vw);
+    min-height: 560px;
   }
 
   .production__grid {
@@ -426,15 +431,43 @@
 
   .acrylic-feature__media {
     height: 440px;
+    min-height: 0;
+    border-radius: 22px;
+  }
+
+  .acrylic-feature__content .section-title {
+    font-size: clamp(2.55rem, 11vw, 3.25rem);
   }
 
   .acrylic-feature__media::after {
-    border-width: 10px;
+    inset: 7px;
+    border-radius: 16px;
   }
 
   .bottle-carousel__item {
     width: 48%;
-    height: 70%;
+    height: 82%;
+  }
+
+  .bottle-carousel__stage {
+    inset: 62px 0 86px;
+  }
+
+  .bottle-carousel__topline {
+    top: 23px;
+    right: 22px;
+    left: 22px;
+  }
+
+  .bottle-carousel__topline span:last-child {
+    display: none;
+  }
+
+  .acrylic-feature__badge {
+    top: 50px;
+    right: 20px;
+    padding: 7px 9px;
+    font-size: 0.54rem;
   }
 
   .bottle-carousel__control {
@@ -451,8 +484,44 @@
   }
 
   .bottle-carousel__footer {
+    right: 13px;
     bottom: 18px;
-    left: 18px;
+    left: 13px;
+    min-height: 61px;
+    gap: 10px;
+    padding: 11px 12px;
+    border-radius: 13px;
+  }
+
+  .bottle-carousel__caption {
+    gap: 8px;
+  }
+
+  .bottle-carousel__footer p {
+    max-width: 110px;
+    font-size: 0.65rem;
+  }
+
+  .bottle-carousel__count {
+    font-size: 0.58rem;
+  }
+
+  .bottle-carousel__actions {
+    gap: 9px;
+  }
+
+  .bottle-carousel__dots {
+    gap: 6px;
+  }
+
+  .bottle-carousel__dots button {
+    width: 11px;
+    height: 11px;
+  }
+
+  .bottle-carousel__autoplay {
+    width: 26px;
+    height: 26px;
   }
 
   .production__grid {

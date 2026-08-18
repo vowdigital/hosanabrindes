@@ -1,17 +1,18 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from 'react'
 import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { assetUrl } from '../lib/assets'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { CheckIcon } from '../components/Icons'
 import { WhatsAppButton } from '../components/WhatsAppButton'
+import { BottleStageScene } from '../components/BottleStageScene'
 
 const bottles = [
-  { name: 'Branca', file: 'Garrafa térmica branco.png', width: 1427, height: 2645 },
-  { name: 'Dourada', file: 'Garrafa térmica dourada.png', width: 697, height: 2351 },
-  { name: 'Preta', file: 'Garrafa térmica preta.png', width: 933, height: 2577 },
-  { name: 'Rosa', file: 'Garrafa térmica rosa.png', width: 975, height: 2691 },
-  { name: 'Tiffany', file: 'Garrafa térmica tiffany.png', width: 970, height: 2678 },
+  { name: 'Branca', file: 'Garrafa térmica branco.png', width: 1427, height: 2645, swatch: '#eeeae5', accent: '#a99f96' },
+  { name: 'Dourada', file: 'Garrafa térmica dourada.png', width: 697, height: 2351, swatch: '#c7a76d', accent: '#a67c35' },
+  { name: 'Preta', file: 'Garrafa térmica preta.png', width: 933, height: 2577, swatch: '#252525', accent: '#cf1f26' },
+  { name: 'Rosa', file: 'Garrafa térmica rosa.png', width: 975, height: 2691, swatch: '#ed72aa', accent: '#d42c76' },
+  { name: 'Tiffany', file: 'Garrafa térmica tiffany.png', width: 970, height: 2678, swatch: '#83d1d2', accent: '#298f93' },
 ]
 
 const wrapIndex = (index: number) => ((index % bottles.length) + bottles.length) % bottles.length
@@ -23,28 +24,41 @@ export const AcrylicFeature = () => {
   const rotation = useRef(0)
   const targetRotation = useRef(0)
   const animation = useRef<gsap.core.Tween | null>(null)
+  const autoplayProgress = useRef<HTMLSpanElement>(null)
+  const drag = useRef({ active: false, startX: 0, deltaX: 0, pointerId: -1 })
+  const hovering = useRef(false)
+  const focusWithin = useRef(false)
   const [active, setActive] = useState(0)
   const [paused, setPaused] = useState(false)
+  const [interacting, setInteracting] = useState(false)
   const reducedMotion = useReducedMotion()
+
+  const syncInteraction = () => {
+    setInteracting(hovering.current || focusWithin.current || drag.current.active)
+  }
 
   const renderCarousel = useCallback((value: number) => {
     const carouselWidth = stage.current?.clientWidth || 600
-    const radius = Math.min(carouselWidth * 0.28, 175)
-    const depth = Math.min(carouselWidth * 0.2, 125)
+    const spread = Math.min(carouselWidth * 0.285, 180)
 
     items.current.forEach((item, index) => {
       if (!item) return
-      const angle = (index - value) * (Math.PI * 2 / bottles.length)
-      const prominence = (Math.cos(angle) + 1) / 2
+      let distance = index - value
+      while (distance > bottles.length / 2) distance -= bottles.length
+      while (distance < -bottles.length / 2) distance += bottles.length
+      const distanceFromCenter = Math.abs(distance)
+      const prominence = Math.max(0, 1 - distanceFromCenter / 2.7)
 
       gsap.set(item, {
         xPercent: -50,
         yPercent: -50,
-        x: Math.sin(angle) * radius,
-        z: Math.cos(angle) * depth,
-        scale: 0.58 + prominence * 0.42,
-        autoAlpha: 0.12 + prominence * 0.88,
-        rotateY: -Math.sin(angle) * 16,
+        x: distance * spread,
+        y: distanceFromCenter * 18,
+        z: prominence * 150 - 95,
+        scale: 0.5 + prominence * 0.5,
+        autoAlpha: 0.14 + prominence * 0.86,
+        rotateY: distance * -11,
+        rotateZ: distance * 1.8,
         zIndex: Math.round(prominence * 100),
       })
     })
@@ -68,6 +82,10 @@ export const AcrylicFeature = () => {
       },
       onComplete: () => {
         rotation.current = targetRotation.current
+        const currentItem = items.current[wrapIndex(Math.round(targetRotation.current))]
+        if (currentItem && !reducedMotion) {
+          gsap.fromTo(currentItem.querySelector('img'), { scale: 0.985 }, { scale: 1, duration: 0.45, ease: 'back.out(2)' })
+        }
       },
     })
   }, [reducedMotion, renderCarousel])
@@ -78,6 +96,18 @@ export const AcrylicFeature = () => {
     if (distance > bottles.length / 2) distance -= bottles.length
     if (distance < -bottles.length / 2) distance += bottles.length
     rotateBy(distance)
+  }
+
+  const finishDrag = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!drag.current.active || event.pointerId !== drag.current.pointerId) return
+    const deltaX = drag.current.deltaX
+    drag.current.active = false
+    drag.current.pointerId = -1
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) event.currentTarget.releasePointerCapture(event.pointerId)
+
+    if (Math.abs(deltaX) > 34) rotateBy(deltaX < 0 ? 1 : -1)
+    else renderCarousel(targetRotation.current)
+    syncInteraction()
   }
 
   useGSAP(() => {
@@ -91,28 +121,88 @@ export const AcrylicFeature = () => {
     }
   }, { scope, dependencies: [renderCarousel], revertOnUpdate: true })
 
-  useEffect(() => {
-    if (paused || reducedMotion) return
-    const timer = window.setInterval(() => rotateBy(1), 3800)
-    return () => window.clearInterval(timer)
-  }, [paused, reducedMotion, rotateBy])
+  useGSAP(() => {
+    const progress = autoplayProgress.current
+    if (!progress) return
+    gsap.set(progress, { scaleX: 0 })
+    if (paused || interacting || reducedMotion) return
+
+    const autoplay = gsap.to(progress, {
+      scaleX: 1,
+      duration: 4.8,
+      ease: 'none',
+      repeat: -1,
+      onRepeat: () => rotateBy(1),
+    })
+    return () => autoplay.kill()
+  }, { scope, dependencies: [paused, interacting, reducedMotion, rotateBy], revertOnUpdate: true })
 
   return (
-    <section className="section acrylic-feature" ref={scope}>
+    <section className="section acrylic-feature" id="garrafas" ref={scope}>
       <div className="container acrylic-feature__grid">
         <div
           className="acrylic-feature__media"
           data-reveal="clip"
-          onMouseEnter={() => setPaused(true)}
-          onMouseLeave={() => setPaused(false)}
-          onFocusCapture={() => setPaused(true)}
+          onMouseEnter={() => {
+            hovering.current = true
+            syncInteraction()
+          }}
+          onMouseLeave={() => {
+            hovering.current = false
+            syncInteraction()
+          }}
+          onFocusCapture={() => {
+            focusWithin.current = true
+            syncInteraction()
+          }}
           onBlurCapture={(event) => {
-            if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setPaused(false)
+            if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+              focusWithin.current = false
+              syncInteraction()
+            }
           }}
           aria-roledescription="carrossel"
           aria-label="Cores de garrafas térmicas"
         >
-          <div className="bottle-carousel__stage" ref={stage}>
+          <BottleStageScene accent={bottles[active].accent} active={active} />
+          <div className="bottle-carousel__topline" aria-hidden="true">
+            <span>Escolha sua cor</span>
+            <span>Arraste para explorar</span>
+          </div>
+          <span className="acrylic-feature__badge">5 cores disponíveis</span>
+
+          <div
+            className="bottle-carousel__stage"
+            ref={stage}
+            tabIndex={0}
+            role="group"
+            aria-label={`Garrafa térmica ${bottles[active].name.toLowerCase()}, item ${active + 1} de ${bottles.length}`}
+            onKeyDown={(event) => {
+              if (event.key === 'ArrowLeft') {
+                event.preventDefault()
+                rotateBy(-1)
+              }
+              if (event.key === 'ArrowRight') {
+                event.preventDefault()
+                rotateBy(1)
+              }
+            }}
+            onPointerDown={(event) => {
+              if (event.pointerType === 'mouse' && event.button !== 0) return
+              animation.current?.kill()
+              drag.current = { active: true, startX: event.clientX, deltaX: 0, pointerId: event.pointerId }
+              event.currentTarget.setPointerCapture(event.pointerId)
+              syncInteraction()
+            }}
+            onPointerMove={(event) => {
+              if (!drag.current.active || event.pointerId !== drag.current.pointerId) return
+              drag.current.deltaX = event.clientX - drag.current.startX
+              const dragDistance = Math.max(120, Math.min(event.currentTarget.clientWidth * 0.3, 180))
+              renderCarousel(targetRotation.current - drag.current.deltaX / dragDistance)
+            }}
+            onPointerUp={finishDrag}
+            onPointerCancel={finishDrag}
+          >
             {bottles.map((bottle, index) => (
               <figure
                 className="bottle-carousel__item"
@@ -140,21 +230,36 @@ export const AcrylicFeature = () => {
           </button>
 
           <div className="bottle-carousel__footer">
-            <p aria-live="polite">Garrafa térmica <strong>{bottles[active].name}</strong></p>
-            <div className="bottle-carousel__dots" aria-label="Escolher cor">
-              {bottles.map((bottle, index) => (
-                <button
-                  type="button"
-                  className={active === index ? 'is-active' : ''}
-                  key={bottle.name}
-                  onClick={() => goTo(index)}
-                  aria-label={`Mostrar garrafa ${bottle.name.toLowerCase()}`}
-                  aria-current={active === index ? 'true' : undefined}
-                />
-              ))}
+            <div className="bottle-carousel__caption">
+              <span className="bottle-carousel__count">0{active + 1} / 0{bottles.length}</span>
+              <p aria-live="polite">Garrafa térmica <strong>{bottles[active].name}</strong></p>
             </div>
+            <div className="bottle-carousel__actions">
+              <button
+                className="bottle-carousel__autoplay"
+                type="button"
+                onClick={() => setPaused((value) => !value)}
+                aria-label={paused ? 'Retomar rotação automática' : 'Pausar rotação automática'}
+                aria-pressed={paused}
+              >
+                <span aria-hidden="true">{paused ? '▶' : 'Ⅱ'}</span>
+              </button>
+              <div className="bottle-carousel__dots" aria-label="Escolher cor">
+                {bottles.map((bottle, index) => (
+                  <button
+                    type="button"
+                    className={active === index ? 'is-active' : ''}
+                    style={{ '--dot-color': bottle.swatch } as CSSProperties}
+                    key={bottle.name}
+                    onClick={() => goTo(index)}
+                    aria-label={`Mostrar garrafa ${bottle.name.toLowerCase()}`}
+                    aria-current={active === index ? 'true' : undefined}
+                  />
+                ))}
+              </div>
+            </div>
+            <span className="bottle-carousel__progress" aria-hidden="true"><span ref={autoplayProgress} /></span>
           </div>
-          <span>5 cores disponíveis</span>
         </div>
 
         <div className="acrylic-feature__content" data-reveal>

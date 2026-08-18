@@ -37,7 +37,7 @@ export const products: Product[] = [
     description: 'Uma escolha durável para equipes, kits corporativos e ações de relacionamento.',
     featured: true,
     imageFit: 'contain',
-    backgroundColor: '#f4e7e5',
+    backgroundColor: '#e7beba',
     accentColor: '#b72b30',
   },
   {
@@ -57,7 +57,7 @@ export const products: Product[] = [
     description: 'Presença de marca no escritório, em eventos e nos momentos de pausa da equipe.',
     featured: true,
     imageFit: 'contain',
-    backgroundColor: '#e7eaf4',
+    backgroundColor: '#c7d1e9',
     accentColor: '#222a5a',
   },
   {
@@ -78,7 +78,7 @@ export const products: Product[] = [
     description: 'Um presente corporativo durável para clientes, lideranças e times.',
     featured: true,
     imageFit: 'contain',
-    backgroundColor: '#eee4dc',
+    backgroundColor: '#ddc5b3',
     accentColor: '#8b6453',
   },
   {
@@ -93,7 +93,7 @@ export const products: Product[] = [
     minimum: 'A partir de 10 unidades',
     description: 'Uma opção funcional para campanhas, equipes e ações de relacionamento.',
     imageFit: 'contain',
-    backgroundColor: '#e2ecec',
+    backgroundColor: '#badbdd',
     accentColor: '#276a70',
   },
   {
@@ -108,7 +108,7 @@ export const products: Product[] = [
     minimum: 'A partir de 10 unidades',
     description: 'Uma escolha marcante para eventos, confraternizações e experiências de marca.',
     imageFit: 'contain',
-    backgroundColor: '#f6ddea',
+    backgroundColor: '#eab7d2',
     accentColor: '#c21868',
   },
   {
@@ -123,7 +123,7 @@ export const products: Product[] = [
     minimum: 'A partir de 10 unidades',
     description: 'Uma caneca de presença marcante para kits, eventos e experiências de marca.',
     imageFit: 'contain',
-    backgroundColor: '#dcece2',
+    backgroundColor: '#b9dcc6',
     accentColor: '#238451',
   },
 ]
