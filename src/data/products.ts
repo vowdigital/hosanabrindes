@@ -1,5 +1,97 @@
 import { assetUrl } from '../lib/assets'
 
+const galleryAssetUrls = import.meta.glob('../../assets/*.{png,jpg,jpeg,webp,avif}', {
+  eager: true,
+  import: 'default',
+  query: '?url',
+}) as Record<string, string>
+
+const galleryBackgrounds: Record<string, string> = {
+  '1.png': '#bfc9e4',
+  '2.png': '#c8ceca',
+  '3.png': '#f6c7b0',
+  '4.png': '#f0bfd0',
+  '5.png': '#cfc3e2',
+  '8.png': '#bcd8c6',
+  '9.png': '#d9edaa',
+  'AMARELO.png': '#e6eeb7',
+  'AZUL ESCURO.png': '#c4cfe7',
+  'CINZA ESCURO.png': '#d0d2d1',
+  'COPO TÉRMICO 500ML COM ABRIDOR LILAS.png': '#ddd5e6',
+  'COPO TÉRMICO 500ML COM ABRIDOR PRETO 2.png': '#d0cdcb',
+  'COPO TÉRMICO 500ML COM ABRIDOR ROSÉ 2.png': '#ead5dc',
+  'COPO TÉRMICO 500ML COM ABRIDOR ROXO.png': '#d9c9e4',
+  'COPO TÉRMICO 500ML COM ABRIDOR TIFFANY.png': '#c4e9e5',
+  'G4.png': '#c5dfcd',
+  'G5.png': '#e3e5ef',
+  'G6.png': '#e7c7ce',
+  'G7.png': '#c4e7e6',
+  'gb011_440ml_munique_branca.png': '#ede9e4',
+  'gb011_440ml_munique_cobre.png': '#e3c3ad',
+  'gb011_440ml_munique_dourada.png': '#eddbb3',
+  'gb011_440ml_munique_laranja.png': '#efc4a6',
+  'gb011_440ml_munique_laranja_neon.png': '#ffd0a5',
+  'gb011_440ml_munique_preta.png': '#cfccca',
+  'gb011_440ml_munique_roxa.png': '#dfc5e6',
+  'gb011_440ml_munique_tradicional.png': '#d8dcde',
+  'gb011_440ml_munique_verde.png': '#c5dccd',
+  'gb011_440ml_munique_verde_neon.png': '#d9ecae',
+  'gb011_440ml_munique_vermelha.png': '#ebc2c1',
+  'long 1.png': '#edc0c1',
+  'long 2.png': '#ece8df',
+  'long3.png': '#d8d0d2',
+  'PRATA.png': '#dcdddd',
+  'preto.png': '#ceccca',
+  'rosa baby.png': '#f4dbe6',
+  'rosa neon.png': '#f5c2d5',
+  'rosa.png': '#e6c1d9',
+  'roxo.png': '#d8c4e4',
+  'tiffany.png': '#c7e9e7',
+  'todas a as 013.png': '#c4e3e9',
+  'VERDE CLARO.png': '#dce8bf',
+  'VERDE ESCURO.png': '#c0dcca',
+  'verde neon.png': '#d9edaa',
+  'verde.png': '#bfdac8',
+  'vermelho.png': '#e9c0c1',
+}
+
+const galleryNames: Record<string, string> = {
+  '1.png': 'Copo long drink azul-marinho',
+  '2.png': 'Copo long drink cinza',
+  '3.png': 'Copo long drink laranja',
+  '4.png': 'Copo long drink rosa',
+  '5.png': 'Copo long drink roxo',
+  '8.png': 'Copo long drink verde',
+  '9.png': 'Copo long drink verde neon',
+  'AMARELO.png': 'Sacochila amarela',
+  'AZUL ESCURO.png': 'Sacochila azul-escura',
+  'CINZA ESCURO.png': 'Sacochila cinza-escura',
+  'G4.png': 'Taça de gin verde',
+  'G5.png': 'Taça de gin branca',
+  'G6.png': 'Taça de gin vinho',
+  'G7.png': 'Taça de gin tiffany',
+  'long 1.png': 'Copo long drink vermelho',
+  'long 2.png': 'Copo long drink branco',
+  'long3.png': 'Copo long drink estampado',
+  'PRATA.png': 'Sacochila prata',
+  'VERDE CLARO.png': 'Sacochila verde-clara',
+  'VERDE ESCURO.png': 'Sacochila verde-escura',
+}
+
+const formatGalleryName = (filename: string) => {
+  if (galleryNames[filename]) return galleryNames[filename]
+
+  const withoutExtension = filename.replace(/\.[^.]+$/, '')
+  if (withoutExtension.startsWith('gb011_440ml_munique_')) {
+    return `Caneca Munique ${withoutExtension.replace('gb011_440ml_munique_', '').replaceAll('_', ' ')}`
+  }
+  if (withoutExtension.startsWith('COPO TÉRMICO 500ML COM ABRIDOR ')) {
+    return `Copo térmico ${withoutExtension.replace('COPO TÉRMICO 500ML COM ABRIDOR ', '').replace(/ 2$/, '').toLowerCase()}`
+  }
+
+  return `Caneca ${withoutExtension.replaceAll('_', ' ').toLowerCase()}`
+}
+
 export interface Product {
   id: string
   name: string
@@ -128,57 +220,15 @@ export const products: Product[] = [
   },
 ]
 
-export const galleryProducts = [
-  {
-    name: 'Copo térmico branco',
-    image: assetUrl('COPO TÉRMICO 500ML COM ABRIDOR  BRANCO 2.png'),
-    alt: 'Copo térmico branco com abridor',
-  },
-  {
-    name: 'Garrafa térmica rosa',
-    image: assetUrl('Garrafa térmica rosa.png'),
-    alt: 'Garrafa térmica rosa',
-  },
-  {
-    name: 'Copo térmico verde',
-    image: assetUrl('COPO TÉRMICO 500ML COM ABRIDOR  VERDE 2.png'),
-    alt: 'Copo térmico verde com abridor',
-  },
-  {
-    name: 'Garrafa térmica branca',
-    image: assetUrl('Garrafa térmica branco.png'),
-    alt: 'Garrafa térmica branca',
-  },
-  {
-    name: 'Copo térmico laranja',
-    image: assetUrl('COPO TÉRMICO 500ML COM ABRIDOR LARANJA VERÃO.png'),
-    alt: 'Copo térmico laranja com abridor',
-  },
-  {
-    name: 'Garrafa térmica preta',
-    image: assetUrl('Garrafa térmica preta.png'),
-    alt: 'Garrafa térmica preta',
-  },
-  {
-    name: 'Copo térmico rosa',
-    image: assetUrl('COPO TÉRMICO 500ML COM ABRIDOR ROSA NEON.png'),
-    alt: 'Copo térmico rosa com abridor',
-  },
-  {
-    name: 'Garrafa térmica tiffany',
-    image: assetUrl('Garrafa térmica tiffany.png'),
-    alt: 'Garrafa térmica em tom tiffany',
-  },
-]
-
-export const clientMarks = [
-  ['Unimed', '1. UNIMED.png'],
-  ['Magrass', '2. MAGRASS.png'],
-  ['Natura', '3. NATURA.png'],
-  ['Emagrecentro', '4. EMAGRECENTRO.png'],
-  ['Odonto Excellence', '5. ODONTO EXCELLENCE.png'],
-  ['Amorinha', '6. AMORINHA.png'],
-  ['Smart Fit', '7. SMARTFIT.png'],
-  ['Sicoob', '8. SICOOB.png'],
-  ['Bombeiros', '9. BOMBEIRO.png'],
-].map(([name, file]) => ({ name, image: assetUrl(file) }))
+export const galleryProducts = Object.entries(galleryAssetUrls)
+  .map(([path, image]) => {
+    const filename = path.split('/').pop() ?? path
+    const name = formatGalleryName(filename)
+    return {
+      name,
+      image,
+      alt: `${name} para personalização`,
+      background: galleryBackgrounds[filename] ?? '#eee9e6',
+    }
+  })
+  .sort((a, b) => a.name.localeCompare(b.name, 'pt-BR', { numeric: true }))

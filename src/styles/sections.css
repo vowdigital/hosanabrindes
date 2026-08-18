@@ -8,18 +8,6 @@
     var(--white);
 }
 
-.hero::after {
-  position: absolute;
-  right: -8%;
-  bottom: -28%;
-  width: 52vw;
-  height: 52vw;
-  border: 1px solid rgba(207, 31, 38, 0.12);
-  border-radius: 50%;
-  content: "";
-  pointer-events: none;
-}
-
 .hero__grid {
   position: relative;
   z-index: 2;
@@ -114,33 +102,11 @@
   isolation: isolate;
 }
 
-.hero-visual__backdrop {
-  position: absolute;
-  top: 8%;
-  right: 4%;
-  width: 78%;
-  height: 78%;
-  border-radius: 46% 46% 8px 8px;
-  background: var(--brand-red-soft);
-  transform: rotate(3deg);
-}
-
-.hero-scene {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-}
-
-.hero-scene canvas {
-  width: 100%;
-  height: 100%;
-}
-
 .hero-visual__main {
   position: absolute;
   top: 5%;
   right: 6%;
+  z-index: 3;
   width: 75%;
   height: 82%;
   display: grid;
@@ -182,6 +148,25 @@
   width: 21%;
   height: 51%;
   transform: rotate(7deg);
+}
+
+.hero-product--bag {
+  right: 14%;
+  bottom: -2%;
+  z-index: 2;
+  width: 55%;
+  height: 34%;
+  opacity: 0.92;
+  transform: rotate(-2deg);
+}
+
+.hero-product--gin {
+  top: 1%;
+  right: 1%;
+  z-index: 5;
+  width: 15%;
+  height: 34%;
+  transform: rotate(9deg);
 }
 
 .hero-visual__label {
@@ -979,176 +964,39 @@
   margin-top: 28px;
 }
 
-.social-proof {
-  background: var(--brand-red-soft);
-}
-
-.social-proof__headline {
-  margin-bottom: 62px;
-}
-
-.social-proof__grid {
-  display: grid;
-  grid-template-columns: 0.62fr 0.62fr 1.76fr;
-  min-height: 400px;
-}
-
-.social-proof__score,
-.social-proof__instagram {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 30px;
-  border: 1px solid rgba(207, 31, 38, 0.15);
-  background: var(--white);
-}
-
-.social-proof__score strong,
-.social-proof__instagram strong {
-  font-family: var(--font-display);
-  font-size: clamp(3.4rem, 6vw, 6.5rem);
-  letter-spacing: -0.09em;
-  line-height: 0.9;
-}
-
-.social-proof__score p,
-.social-proof__instagram p {
-  margin: 20px 0 0;
-  color: var(--muted);
-  font-size: 0.82rem;
-  line-height: 1.5;
-}
-
-.social-proof__stars {
-  display: flex;
-  gap: 2px;
-  margin-bottom: auto;
-  color: #f6a900;
-}
-
-.social-proof__instagram {
-  background: var(--brand-red);
-  color: var(--white);
-}
-
-.social-proof__instagram > span {
-  margin-bottom: auto;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-.social-proof__instagram p {
-  color: rgba(255, 255, 255, 0.68);
-}
-
-.social-proof__instagram a {
-  color: var(--white);
-  font-weight: 750;
-}
-
-.social-proof__creative {
-  min-width: 0;
-  margin: 0;
-  overflow: hidden;
-}
-
-.social-proof__creative picture,
-.social-proof__creative img {
-  width: 100%;
-  height: 100%;
-}
-
-.social-proof__creative img {
-  object-fit: cover;
-  object-position: center;
-}
-
-.client-marks {
-  margin-top: 65px;
-}
-
-.client-marks > p {
-  margin-bottom: 34px;
-  color: var(--muted);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.client-marks__viewport {
-  width: 100%;
-  padding-block: 28px;
-  overflow: hidden;
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
-}
-
-.client-marks__track {
-  display: flex;
-  width: max-content;
-  will-change: transform;
-  animation: client-marks-scroll 30s linear infinite;
-}
-
-.client-marks__viewport:hover .client-marks__track {
-  animation-play-state: paused;
-}
-
-.client-marks__group {
-  display: flex;
-  align-items: center;
-  gap: clamp(52px, 6vw, 96px);
-  padding-right: clamp(52px, 6vw, 96px);
-}
-
-.client-mark {
-  display: grid;
-  width: clamp(190px, 18vw, 280px);
-  height: clamp(140px, 13vw, 190px);
-  flex: 0 0 auto;
-  place-items: center;
-  padding: 14px;
-}
-
-.client-mark img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  opacity: 0.82;
-  transition: opacity 220ms ease, transform 220ms ease;
-}
-
-.client-mark:hover img {
-  opacity: 1;
-  transform: scale(1.06);
-}
-
-@keyframes client-marks-scroll {
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .client-marks__track {
-    animation: none;
-  }
-}
-
 .portfolio {
   overflow: hidden;
+  padding-block: clamp(70px, 7vw, 104px);
+  background: linear-gradient(180deg, var(--white), #fffafa);
 }
 
 .portfolio__heading {
-  margin-bottom: 70px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.48fr);
+  align-items: end;
+  gap: 30px;
+  margin-bottom: 42px;
+}
+
+.portfolio__heading .eyebrow,
+.portfolio__heading .section-title {
+  grid-column: 1;
+}
+
+.portfolio__heading .section-title {
+  max-width: 850px;
+}
+
+.portfolio__heading .section-lead {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: end;
+  margin: 0 0 5px;
 }
 
 .portfolio-marquee {
   display: grid;
-  gap: 18px;
+  gap: 0;
 }
 
 .portfolio-marquee__viewport {
@@ -1159,44 +1007,37 @@
 .portfolio-marquee__track {
   display: flex;
   width: max-content;
-  gap: 18px;
   will-change: transform;
+}
+
+.portfolio-marquee__group {
+  display: flex;
+  gap: 0;
+  padding: 0;
 }
 
 .portfolio-card {
   position: relative;
   display: grid;
-  width: clamp(240px, 23vw, 350px);
-  height: clamp(310px, 33vw, 480px);
+  width: clamp(150px, 12.5vw, 240px);
+  height: clamp(160px, 13.5vw, 260px);
   flex: 0 0 auto;
   place-items: center;
   margin: 0;
   overflow: hidden;
-  background: var(--surface);
-}
-
-.portfolio-marquee__viewport:nth-child(2) .portfolio-card {
-  background: var(--brand-red-soft);
+  background: var(--portfolio-tone, var(--surface));
 }
 
 .portfolio-card img {
-  width: 68%;
+  width: 76%;
   height: 78%;
   object-fit: contain;
-  filter: drop-shadow(0 22px 18px rgba(44, 16, 16, 0.14));
-  transition: transform 400ms ease;
+  filter: drop-shadow(0 13px 12px rgba(44, 16, 16, 0.13));
+  transition: transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .portfolio-card:hover img {
-  transform: scale(1.04) rotate(-1deg);
-}
-
-.portfolio-card figcaption {
-  position: absolute;
-  bottom: 18px;
-  left: 20px;
-  font-size: 0.7rem;
-  font-weight: 800;
+  transform: translateY(-5px) scale(1.055) rotate(-1deg);
 }
 
 .final-cta {

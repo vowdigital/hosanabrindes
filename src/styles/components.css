@@ -149,25 +149,72 @@
   left: 0;
   z-index: 100;
   height: var(--header-height);
-  border-bottom: 1px solid transparent;
-  transition: background 250ms ease, border-color 250ms ease, box-shadow 250ms ease;
-}
-
-.site-header--scrolled {
-  border-color: rgba(45, 33, 33, 0.08);
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 10px 32px rgba(35, 17, 17, 0.06);
-  backdrop-filter: blur(14px);
+  padding-top: 8px;
+  pointer-events: none;
 }
 
 .site-header__inner {
+  position: relative;
   display: flex;
-  height: 100%;
+  height: calc(100% - 8px);
   align-items: center;
   gap: 34px;
+  padding: 0 10px 0 15px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  border-radius: 18px;
+  pointer-events: auto;
+  transition:
+    background-color 300ms ease,
+    border-color 300ms ease,
+    box-shadow 300ms ease,
+    transform 300ms ease;
+  animation: header-enter 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.site-header--scrolled .site-header__inner {
+  border-color: rgba(45, 33, 33, 0.08);
+  background: rgba(255, 255, 255, 0.91);
+  box-shadow: 0 12px 34px rgba(35, 17, 17, 0.08);
+  backdrop-filter: blur(18px) saturate(145%);
+}
+
+.site-header__glow {
+  position: absolute;
+  top: -60px;
+  left: -95px;
+  width: 240px;
+  height: 140px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(207, 31, 38, 0.12), transparent 68%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-30px);
+  transition: opacity 400ms ease, transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.site-header--scrolled .site-header__glow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.site-header__progress {
+  position: absolute;
+  right: 14px;
+  bottom: 0;
+  left: 14px;
+  height: 2px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--brand-red), var(--brand-red-bright));
+  pointer-events: none;
+  transform: scaleX(var(--scroll-progress));
+  transform-origin: left;
+  transition: transform 90ms linear;
 }
 
 .brand {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   gap: 11px;
@@ -177,13 +224,50 @@
   letter-spacing: -0.04em;
 }
 
-.brand img {
+.brand__mark {
+  position: relative;
+  display: grid;
   width: 42px;
   height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+}
+
+.brand__mark img {
+  position: relative;
+  z-index: 2;
+  width: 42px;
+  height: 42px;
+  transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.brand__mark > span {
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(207, 31, 38, 0.34);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.75);
+}
+
+.brand:hover .brand__mark img {
+  transform: rotate(-7deg) scale(1.06);
+}
+
+.brand:hover .brand__mark > span {
+  animation: brand-ripple 900ms ease-out;
 }
 
 .brand strong {
   font-weight: 850;
+}
+
+.brand__wordmark {
+  transition: transform 280ms ease;
+}
+
+.brand:hover .brand__wordmark {
+  transform: translateX(2px);
 }
 
 .site-nav {
@@ -202,6 +286,20 @@
   color: var(--ink-soft);
   font-size: 0.79rem;
   font-weight: 700;
+  transition: color 220ms ease, transform 220ms ease;
+  animation: nav-link-enter 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.site-nav__panel > a:nth-child(2) {
+  animation-delay: 50ms;
+}
+
+.site-nav__panel > a:nth-child(3) {
+  animation-delay: 100ms;
+}
+
+.site-nav__panel > a:nth-child(4) {
+  animation-delay: 150ms;
 }
 
 .site-nav__panel > a:not(.whatsapp-button)::after {
@@ -217,9 +315,42 @@
   transition: transform 250ms ease;
 }
 
-.site-nav__panel > a:not(.whatsapp-button):hover::after {
+.site-nav__panel > a:not(.whatsapp-button):hover,
+.site-nav__panel > a.site-nav__link--active {
+  color: var(--brand-red);
+  transform: translateY(-1px);
+}
+
+.site-nav__panel > a:not(.whatsapp-button):hover::after,
+.site-nav__panel > a.site-nav__link--active::after {
   transform: scaleX(1);
   transform-origin: left;
+}
+
+@keyframes header-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+}
+
+@keyframes nav-link-enter {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes brand-ripple {
+  0% {
+    opacity: 0.6;
+    transform: scale(0.78);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1.45);
+  }
 }
 
 .site-nav__cta-mobile,

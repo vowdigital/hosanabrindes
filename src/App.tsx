@@ -7,7 +7,6 @@ import { Products } from './sections/Products'
 import { AcrylicFeature } from './sections/AcrylicFeature'
 import { Production } from './sections/Production'
 import { Needs } from './sections/Needs'
-import { SocialProof } from './sections/SocialProof'
 import { Portfolio } from './sections/Portfolio'
 import { FinalCTA } from './sections/FinalCTA'
 import { FAQSection } from './sections/FAQSection'
@@ -31,7 +30,6 @@ function App() {
           <AcrylicFeature />
           <Production />
           <Needs />
-          <SocialProof />
           <Portfolio />
           <FinalCTA />
           <FAQSection />
