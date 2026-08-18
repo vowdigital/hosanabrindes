@@ -7,7 +7,7 @@ const productOptions = [
   'Copo Térmico',
   'Garrafa Térmica/Inox',
   'Bolsa Térmica',
-  'Sacola de Algodão',
+  'Copo de Gin',
   'Outro produto',
 ]
 

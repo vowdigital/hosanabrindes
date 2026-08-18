@@ -1,5 +1,5 @@
 import type { AnchorHTMLAttributes, MouseEvent } from 'react'
-import { WhatsAppIcon } from './Icons'
+import whatsappIcon from '../../whatsapp.svg'
 import { buildWhatsAppUrl, configuratorMessage, productQuoteMessage, WHATSAPP_MESSAGES } from '../lib/whatsapp'
 import { pushDataLayer } from '../lib/tracking'
 
@@ -70,7 +70,7 @@ export const WhatsAppButton = ({
       aria-label={ariaLabel || `${label} pelo WhatsApp`}
       onClick={handleClick}
     >
-      <WhatsAppIcon className="whatsapp-button__icon" size={21} />
+      <img className="whatsapp-button__icon" src={whatsappIcon} width="21" height="21" alt="" aria-hidden="true" />
       <span>{label}</span>
     </a>
   )

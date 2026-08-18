@@ -1,6 +1,5 @@
 import { useCampaignTracking } from './hooks/useCampaignTracking'
 import { Header } from './components/Header'
-import { FloatingWhatsApp } from './components/FloatingWhatsApp'
 import { MotionController } from './components/MotionController'
 import { Hero } from './sections/Hero'
 import { Authority } from './sections/Authority'
@@ -43,7 +42,6 @@ function App() {
         </main>
         <Footer />
       </MotionController>
-      <FloatingWhatsApp />
     </>
   )
 }

@@ -70,11 +70,11 @@ export const Hero = () => {
           <div className="hero-visual__backdrop" />
           <div className="hero-visual__main">
             <img
-              src={assetUrl('1.1 BRINDES MOBILE.png')}
-              width="900"
-              height="1200"
+              src={assetUrl('Garrafa térmica branco.png')}
+              width="1427"
+              height="2645"
               fetchPriority="high"
-              alt="Garrafa personalizada Hosana em uma composição de campanha"
+              alt="Garrafa térmica branca para personalização"
             />
           </div>
           <img
