@@ -17,12 +17,13 @@ export const AnimatedNumber = ({ value, prefix = '', suffix = '', decimals = 0 }
   const element = useRef<HTMLSpanElement>(null)
   const reducedMotion = useReducedMotion()
 
+  const format = (number: number) => `${prefix}${number.toLocaleString('pt-BR', {
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
+  })}${suffix}`
+
   useGSAP(() => {
     if (!element.current) return
-    const format = (number: number) => `${prefix}${number.toLocaleString('pt-BR', {
-      minimumFractionDigits: decimals,
-      maximumFractionDigits: decimals,
-    })}${suffix}`
 
     if (reducedMotion) {
       element.current.textContent = format(value)
@@ -30,16 +31,19 @@ export const AnimatedNumber = ({ value, prefix = '', suffix = '', decimals = 0 }
     }
 
     const counter = { value: 0 }
-    gsap.to(counter, {
+    const animation = gsap.to(counter, {
       value,
-      duration: 1.1,
-      ease: 'power2.out',
-      scrollTrigger: { trigger: element.current, start: 'top 88%', once: true },
+      duration: 1.75,
+      ease: 'power1.out',
+      snap: { value: decimals > 0 ? 10 ** decimals : 1 },
+      scrollTrigger: { trigger: element.current, start: 'top 86%', once: true },
       onUpdate: () => {
         if (element.current) element.current.textContent = format(counter.value)
       },
     })
+
+    return () => animation.kill()
   }, { dependencies: [value, prefix, suffix, decimals, reducedMotion] })
 
-  return <span ref={element}>{prefix}{value.toLocaleString('pt-BR')}{suffix}</span>
+  return <span ref={element}>{reducedMotion ? format(value) : format(0)}</span>
 }

@@ -12,7 +12,7 @@ export const Authority = () => (
     <div className="container authority__grid">
       {stats.map((stat) => (
         <div className="authority__stat" key={stat.label} data-reveal>
-          <strong><AnimatedNumber {...stat} /></strong>
+          <strong>{stat.label === 'no Google' ? '4,9 \u2605' : <AnimatedNumber {...stat} />}</strong>
           <span>{stat.label}</span>
         </div>
       ))}

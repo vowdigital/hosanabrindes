@@ -47,6 +47,7 @@ const techniqueImageUrl = (image: string) => image.startsWith('/') ? image : ass
 export const Production = () => {
   const scope = useRef<HTMLElement>(null)
   const image = useRef<HTMLImageElement>(null)
+  const techniquesScroller = useRef<HTMLDivElement>(null)
   const [active, setActive] = useState(0)
   const reducedMotion = useReducedMotion()
 
@@ -56,6 +57,43 @@ export const Production = () => {
       preload.src = techniqueImageUrl(technique.image)
     })
   }, [])
+
+  useEffect(() => {
+    const scroller = techniquesScroller.current
+    if (!scroller) return
+
+    const syncActiveTechnique = () => {
+      const buttons = Array.from(scroller.querySelectorAll<HTMLButtonElement>('button'))
+      const focus = scroller.getBoundingClientRect().left + scroller.clientWidth / 2
+      let closestIndex = 0
+      let closestDistance = Number.POSITIVE_INFINITY
+
+      buttons.forEach((button, index) => {
+        const bounds = button.getBoundingClientRect()
+        const distance = Math.abs(bounds.left + bounds.width / 2 - focus)
+        if (distance < closestDistance) {
+          closestDistance = distance
+          closestIndex = index
+        }
+      })
+
+      setActive((current) => current === closestIndex ? current : closestIndex)
+    }
+
+    scroller.addEventListener('scroll', syncActiveTechnique, { passive: true })
+    return () => scroller.removeEventListener('scroll', syncActiveTechnique)
+  }, [])
+
+  const scrollToTechnique = (index: number) => {
+    const scroller = techniquesScroller.current
+    const button = scroller?.querySelectorAll<HTMLButtonElement>('button')[index]
+    if (!scroller || !button) return
+
+    scroller.scrollTo({ left: button.offsetLeft, behavior: 'smooth' })
+    setActive(index)
+  }
+
+  const selectTechnique = (index: number) => scrollToTechnique(index)
 
   useGSAP(() => {
     if (reducedMotion || !image.current) return
@@ -99,19 +137,27 @@ export const Production = () => {
           <span className="production__art-label">Feito em Maringá<br />para todo o Brasil</span>
         </div>
 
-        <div className="production__techniques">
-          {techniques.map((technique, index) => (
-            <button
-              type="button"
-              className={active === index ? 'is-active' : ''}
-              key={technique.name}
-              onClick={() => setActive(index)}
-              aria-pressed={active === index}
-            >
-              <span>0{index + 1}</span>
-              <span><strong>{technique.name}</strong><small>{technique.description}</small></span>
-            </button>
-          ))}
+        <div className="production__techniques-wrap">
+          <div className="production__techniques" ref={techniquesScroller} role="region" aria-label="Técnicas de produção" tabIndex={0}>
+            {techniques.map((technique, index) => (
+              <button
+                type="button"
+                className={active === index ? 'is-active' : ''}
+                key={technique.name}
+                onClick={() => selectTechnique(index)}
+                aria-pressed={active === index}
+              >
+                <span>0{index + 1}</span>
+                <span><strong>{technique.name}</strong><small>{technique.description}</small></span>
+              </button>
+            ))}
+          </div>
+          <button className="production__carousel-arrow production__carousel-arrow--previous" type="button" onClick={() => scrollToTechnique(Math.max(0, active - 1))} aria-label="Ver técnica anterior">
+            <span aria-hidden="true">←</span>
+          </button>
+          <button className="production__carousel-arrow production__carousel-arrow--next" type="button" onClick={() => scrollToTechnique(Math.min(techniques.length - 1, active + 1))} aria-label="Ver próxima técnica">
+            <span aria-hidden="true">→</span>
+          </button>
         </div>
       </div>
     </section>

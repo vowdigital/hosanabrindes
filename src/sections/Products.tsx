@@ -15,58 +15,26 @@ export const Products = () => {
   const [active, setActive] = useState(0)
   const reducedMotion = useReducedMotion()
 
+  const advanceProducts = () => {
+    const storyScroller = scope.current?.querySelector<HTMLElement>('.products__stories')
+    storyScroller?.scrollBy({ left: storyScroller.clientWidth * 0.82, behavior: 'smooth' })
+  }
+
+  const rewindProducts = () => {
+    const storyScroller = scope.current?.querySelector<HTMLElement>('.products__stories')
+    storyScroller?.scrollBy({ left: storyScroller.clientWidth * -0.82, behavior: 'smooth' })
+  }
+
   useGSAP(() => {
     const cards = gsap.utils.toArray<HTMLElement>('.product-story')
-    cards.forEach((card, index) => {
-      ScrollTrigger.create({
-        trigger: card,
-        start: 'top 68%',
-        end: 'bottom 32%',
-        onEnter: () => {
-          pushDataLayer('product_view', { product_id: products[index].id, product_name: products[index].name })
-        },
-        once: false,
-      })
-
-      if (!reducedMotion) {
-        const entrance = gsap.timeline({
-          scrollTrigger: {
-            trigger: card,
-            start: 'top 88%',
-            end: 'top 48%',
-            scrub: 0.65,
-          },
-        })
-
-        entrance
-          .fromTo(card.querySelector('.product-story__visual'), {
-            autoAlpha: 0.35,
-            clipPath: 'inset(10% 4% 10% 4%)',
-            scale: 0.94,
-            y: 54,
-          }, {
-            autoAlpha: 1,
-            clipPath: 'inset(0% 0% 0% 0%)',
-            scale: 1,
-            y: 0,
-            ease: 'power2.out',
-          }, 0)
-          .fromTo(card.querySelector('.product-story__body'), {
-            autoAlpha: 0,
-            y: 30,
-          }, {
-            autoAlpha: 1,
-            y: 0,
-            ease: 'power2.out',
-          }, 0.18)
-      }
-    })
+    const storyScroller = scope.current?.querySelector<HTMLElement>('.products__stories')
+    if (!storyScroller || !cards.length) return
 
     const syncActiveProduct = () => {
-      const viewportFocus = window.innerHeight * 0.52
+      const viewportFocus = storyScroller.getBoundingClientRect().left + storyScroller.clientWidth / 2
       const cardCenters = cards.map((card) => {
         const bounds = card.getBoundingClientRect()
-        return bounds.top + bounds.height / 2
+        return bounds.left + bounds.width / 2
       })
       let closestIndex = 0
       let closestDistance = Number.POSITIVE_INFINITY
@@ -83,6 +51,7 @@ export const Products = () => {
       if (activeRef.current !== closestIndex) {
         activeRef.current = closestIndex
         setActive(closestIndex)
+        pushDataLayer('product_view', { product_id: products[closestIndex].id, product_name: products[closestIndex].name })
       }
 
       let backgroundColor = products[closestIndex].backgroundColor
@@ -107,13 +76,23 @@ export const Products = () => {
       if (scope.current) scope.current.style.backgroundColor = backgroundColor
     }
 
-    ScrollTrigger.create({
+    const handleScroll = () => syncActiveProduct()
+    storyScroller.addEventListener('scroll', handleScroll, { passive: true })
+
+    const trigger = ScrollTrigger.create({
       trigger: scope.current,
       start: 'top bottom',
       end: 'bottom top',
       onUpdate: syncActiveProduct,
       onRefresh: syncActiveProduct,
     })
+
+    syncActiveProduct()
+
+    return () => {
+      storyScroller.removeEventListener('scroll', handleScroll)
+      trigger.kill()
+    }
   }, { scope, dependencies: [reducedMotion], revertOnUpdate: true })
 
   return (
@@ -142,7 +121,13 @@ export const Products = () => {
           </ol>
         </div>
 
-        <div className="products__stories">
+        <div className="products__stories-wrap">
+        <div
+          className="products__stories"
+          role="region"
+          aria-label="Carrossel de produtos corporativos"
+          tabIndex={0}
+        >
           {products.map((product, index) => (
             <article
               className={`product-story ${active === index ? 'is-active' : ''} ${!product.image ? 'product-story--type' : ''}`}
@@ -182,6 +167,13 @@ export const Products = () => {
               </div>
             </article>
           ))}
+        </div>
+        <button className="products__scroll-arrow products__scroll-arrow--previous" type="button" onClick={rewindProducts} aria-label="Ver produto anterior">
+          <span aria-hidden="true">←</span>
+        </button>
+        <button className="products__scroll-arrow products__scroll-arrow--next" type="button" onClick={advanceProducts} aria-label="Ver próximo produto">
+          <span aria-hidden="true">→</span>
+        </button>
         </div>
       </div>
     </section>

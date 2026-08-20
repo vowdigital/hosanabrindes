@@ -120,7 +120,6 @@ export const Portfolio = () => {
       <div className="container portfolio__heading" data-reveal>
         <p className="eyebrow">Mais itens do nosso acervo</p>
         <h2 className="section-title">Sua marca em novas cores e formatos.</h2>
-        <p className="section-lead">Quatro linhas em movimento com todos os produtos do nosso acervo.</p>
       </div>
 
       <div className="portfolio-marquee" aria-label="Galeria completa de produtos">
