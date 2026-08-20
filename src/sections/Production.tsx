@@ -3,39 +3,46 @@ import { gsap } from 'gsap'
 import { useGSAP } from '@gsap/react'
 import { assetUrl } from '../lib/assets'
 import { useReducedMotion } from '../hooks/useReducedMotion'
+import heroTop from '../../assets/herotop.jpeg'
+import degradeTwo from '../../assets/degrade2.jpeg'
+import silkScreen from '../../assets/silkscreen.jpeg'
+import laser from '../../assets/laser.jpeg'
+import dtf from '../../assets/dtf.png'
 
 const techniques = [
   {
     name: 'Silk screen',
     description: 'Aplicação versátil para cores sólidas e comunicação de marca.',
-    image: 'AZUL CLARO.png',
-    alt: 'Bolsa azul-clara usada como referência para aplicação em silk screen',
+    image: silkScreen,
+    alt: 'Produto personalizado com aplicação em silk screen',
   },
   {
     name: 'Degradê',
     description: 'Transições de cor que transformam o produto em uma peça visual.',
-    image: 'gb001 verde - azul.png',
-    alt: 'Caneca com acabamento em degradê verde e azul',
+    image: degradeTwo,
+    alt: 'Copos térmicos com acabamento em degradê',
   },
   {
     name: 'Gravação a laser',
     description: 'Acabamento preciso e durável para itens em inox.',
-    image: 'Garrafa térmica preta.png',
-    alt: 'Garrafa térmica preta usada como referência para gravação a laser',
+    image: laser,
+    alt: 'Produto personalizado com gravação a laser',
   },
   {
     name: 'Metalizado',
     description: 'Presença e brilho para ações com maior valor percebido.',
-    image: 'Garrafa térmica dourada.png',
-    alt: 'Garrafa térmica dourada com acabamento metalizado',
+    image: heroTop,
+    alt: 'Copo e taça com acabamento metalizado',
   },
   {
     name: 'DTF',
     description: 'Detalhamento para diferentes superfícies e propostas criativas.',
-    image: 'G3.png',
-    alt: 'Copo de gin rosa usado como referência provisória para personalização DTF',
+    image: dtf,
+    alt: 'Produto personalizado com aplicação DTF',
   },
 ]
+
+const techniqueImageUrl = (image: string) => image.startsWith('/') ? image : assetUrl(image)
 
 export const Production = () => {
   const scope = useRef<HTMLElement>(null)
@@ -46,7 +53,7 @@ export const Production = () => {
   useEffect(() => {
     techniques.forEach((technique) => {
       const preload = new Image()
-      preload.src = assetUrl(technique.image)
+      preload.src = techniqueImageUrl(technique.image)
     })
   }, [])
 
@@ -82,7 +89,7 @@ export const Production = () => {
           <div className="production__ring" aria-hidden="true" />
           <img
             className="production__image production__image--active"
-            src={assetUrl(activeTechnique.image)}
+            src={techniqueImageUrl(activeTechnique.image)}
             ref={image}
             key={activeTechnique.image}
             loading="lazy"

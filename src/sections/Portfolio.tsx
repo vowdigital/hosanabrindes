@@ -1,4 +1,4 @@
-import { useRef, type CSSProperties } from 'react'
+import { useEffect, useRef, type CSSProperties } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
@@ -13,6 +13,36 @@ galleryProducts.forEach((product, index) => galleryRows[index % galleryRows.leng
 export const Portfolio = () => {
   const scope = useRef<HTMLElement>(null)
   const reducedMotion = useReducedMotion()
+
+  useEffect(() => {
+    const images = scope.current?.querySelectorAll<HTMLImageElement>('[data-gallery-src]')
+    if (!images?.length) return
+
+    const loadImage = (image: HTMLImageElement) => {
+      const source = image.dataset.gallerySrc
+      if (!source) return
+
+      image.src = source
+      image.removeAttribute('data-gallery-src')
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      images.forEach(loadImage)
+      return
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return
+        loadImage(entry.target as HTMLImageElement)
+        observer.unobserve(entry.target)
+      })
+    }, { rootMargin: '500px 0px' })
+
+    images.forEach((image) => observer.observe(image))
+
+    return () => observer.disconnect()
+  }, [])
 
   useGSAP(() => {
     if (reducedMotion) return
@@ -33,21 +63,54 @@ export const Portfolio = () => {
       )
     })
 
-    const play = () => animations.forEach((animation) => animation.play())
-    const pause = () => animations.forEach((animation) => animation.pause())
+    let isInViewport = false
+
+    const play = () => {
+      tracks.forEach((track) => track.classList.add('is-animating'))
+      animations.forEach((animation) => animation.play())
+    }
+
+    const pause = () => {
+      tracks.forEach((track) => track.classList.remove('is-animating'))
+      animations.forEach((animation) => animation.pause())
+    }
+
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        pause()
+      } else if (isInViewport) {
+        play()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
 
     const trigger = ScrollTrigger.create({
       trigger: scope.current,
       start: 'top bottom',
       end: 'bottom top',
-      onEnter: play,
-      onEnterBack: play,
-      onLeave: pause,
-      onLeaveBack: pause,
+      onEnter: () => {
+        isInViewport = true
+        if (!document.hidden) play()
+      },
+      onEnterBack: () => {
+        isInViewport = true
+        if (!document.hidden) play()
+      },
+      onLeave: () => {
+        isInViewport = false
+        pause()
+      },
+      onLeaveBack: () => {
+        isInViewport = false
+        pause()
+      },
     })
 
     return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
       trigger.kill()
+      pause()
       animations.forEach((animation) => animation.kill())
     }
   }, { scope, dependencies: [reducedMotion], revertOnUpdate: true })
@@ -76,7 +139,13 @@ export const Portfolio = () => {
                       key={`${item.name}-${copy}`}
                       style={{ '--portfolio-tone': item.background } as CSSProperties}
                     >
-                      <img src={item.image} loading="lazy" decoding="async" alt={copy === 0 ? item.alt : ''} />
+                      <img
+                        data-gallery-src={item.image}
+                        loading="lazy"
+                        decoding="async"
+                        fetchPriority="low"
+                        alt={copy === 0 ? item.alt : ''}
+                      />
                     </figure>
                   ))}
                 </div>

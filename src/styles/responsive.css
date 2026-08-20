@@ -214,9 +214,18 @@
   }
 
   .acrylic-feature__media {
-    order: 2;
+    order: 0;
     height: min(680px, 82vw);
     min-height: 560px;
+  }
+
+  .acrylic-feature__content {
+    order: 1;
+  }
+
+  .acrylic-feature__media.product-mosaic {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(3, 1fr);
   }
 
   .production__grid {
@@ -502,7 +511,7 @@
 
   .portfolio__heading {
     gap: 20px;
-    margin-bottom: 34px;
+    margin-bottom: 0;
   }
 
   .portfolio-card {

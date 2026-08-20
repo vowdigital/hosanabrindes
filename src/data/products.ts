@@ -55,6 +55,20 @@ const galleryBackgrounds: Record<string, string> = {
   'vermelho.png': '#e9c0c1',
 }
 
+const sectionGalleryAssets = new Set([
+  'copo1.jpeg',
+  'garrafa1.jpeg',
+  'doiscopos.jpeg',
+  'garrafaazul.jpeg',
+  'facas.jpeg',
+  'canivete.jpeg',
+  'degrade2.jpeg',
+  'herotop.jpeg',
+  'silkscreen.jpeg',
+  'laser.jpeg',
+  'dtf.png',
+])
+
 const galleryNames: Record<string, string> = {
   '1.png': 'Copo long drink azul-marinho',
   '2.png': 'Copo long drink cinza',
@@ -221,6 +235,7 @@ export const products: Product[] = [
 ]
 
 export const galleryProducts = Object.entries(galleryAssetUrls)
+  .filter(([path]) => !sectionGalleryAssets.has(path.split('/').pop() ?? path))
   .map(([path, image]) => {
     const filename = path.split('/').pop() ?? path
     const name = formatGalleryName(filename)
