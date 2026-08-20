@@ -1,4 +1,4 @@
-import { useRef, useState, type CSSProperties } from 'react'
+import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
@@ -13,7 +13,16 @@ export const Products = () => {
   const scope = useRef<HTMLElement>(null)
   const activeRef = useRef(0)
   const [active, setActive] = useState(0)
+  const [isMobile, setIsMobile] = useState(false)
   const reducedMotion = useReducedMotion()
+
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 820px)')
+    const update = () => setIsMobile(media.matches)
+    update()
+    media.addEventListener('change', update)
+    return () => media.removeEventListener('change', update)
+  }, [])
 
   const advanceProducts = () => {
     const storyScroller = scope.current?.querySelector<HTMLElement>('.products__stories')
@@ -27,6 +36,108 @@ export const Products = () => {
 
   useGSAP(() => {
     const cards = gsap.utils.toArray<HTMLElement>('.product-story')
+
+    if (!isMobile) {
+      cards.forEach((card, index) => {
+        ScrollTrigger.create({
+          trigger: card,
+          start: 'top 68%',
+          end: 'bottom 32%',
+          onEnter: () => {
+            pushDataLayer('product_view', { product_id: products[index].id, product_name: products[index].name })
+          },
+          once: false,
+        })
+
+        if (!reducedMotion) {
+          const entrance = gsap.timeline({
+            scrollTrigger: {
+              trigger: card,
+              start: 'top 88%',
+              end: 'top 48%',
+              scrub: 0.65,
+            },
+          })
+
+          entrance
+            .fromTo(card.querySelector('.product-story__visual'), {
+              autoAlpha: 0.35,
+              clipPath: 'inset(10% 4% 10% 4%)',
+              scale: 0.94,
+              y: 54,
+            }, {
+              autoAlpha: 1,
+              clipPath: 'inset(0% 0% 0% 0%)',
+              scale: 1,
+              y: 0,
+              ease: 'power2.out',
+            }, 0)
+            .fromTo(card.querySelector('.product-story__body'), {
+              autoAlpha: 0,
+              y: 30,
+            }, {
+              autoAlpha: 1,
+              y: 0,
+              ease: 'power2.out',
+            }, 0.18)
+        }
+      })
+
+      const syncActiveProduct = () => {
+        const viewportFocus = window.innerHeight * 0.52
+        const cardCenters = cards.map((card) => {
+          const bounds = card.getBoundingClientRect()
+          return bounds.top + bounds.height / 2
+        })
+        let closestIndex = 0
+        let closestDistance = Number.POSITIVE_INFINITY
+
+        cardCenters.forEach((cardCenter, index) => {
+          const distance = Math.abs(cardCenter - viewportFocus)
+          if (distance < closestDistance) {
+            closestDistance = distance
+            closestIndex = index
+          }
+        })
+
+        if (activeRef.current !== closestIndex) {
+          activeRef.current = closestIndex
+          setActive(closestIndex)
+        }
+
+        let backgroundColor = products[closestIndex].backgroundColor
+
+        if (!reducedMotion) {
+          for (let index = 0; index < cardCenters.length - 1; index += 1) {
+            const currentCenter = cardCenters[index]
+            const nextCenter = cardCenters[index + 1]
+
+            if (viewportFocus >= currentCenter && viewportFocus <= nextCenter) {
+              const progress = gsap.utils.clamp(0, 1, (viewportFocus - currentCenter) / (nextCenter - currentCenter))
+              backgroundColor = gsap.utils.interpolate(
+                products[index].backgroundColor,
+                products[index + 1].backgroundColor,
+                progress,
+              )
+              break
+            }
+          }
+        }
+
+        if (scope.current) scope.current.style.backgroundColor = backgroundColor
+      }
+
+      const trigger = ScrollTrigger.create({
+        trigger: scope.current,
+        start: 'top bottom',
+        end: 'bottom top',
+        onUpdate: syncActiveProduct,
+        onRefresh: syncActiveProduct,
+      })
+
+      return () => trigger.kill()
+    }
+
     const storyScroller = scope.current?.querySelector<HTMLElement>('.products__stories')
     if (!storyScroller || !cards.length) return
 
@@ -93,7 +204,7 @@ export const Products = () => {
       storyScroller.removeEventListener('scroll', handleScroll)
       trigger.kill()
     }
-  }, { scope, dependencies: [reducedMotion], revertOnUpdate: true })
+  }, { scope, dependencies: [reducedMotion, isMobile], revertOnUpdate: true })
 
   return (
     <section
