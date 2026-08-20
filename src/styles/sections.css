@@ -3,9 +3,7 @@
   min-height: min(900px, 100svh);
   padding: clamp(118px, 12vh, 152px) 0 70px;
   overflow: hidden;
-  background:
-    linear-gradient(90deg, rgba(207, 31, 38, 0.035) 1px, transparent 1px) 0 0 / 96px 100%,
-    var(--white);
+  background: url('../../assets/herotop.jpeg') right center / contain no-repeat;
 }
 
 .hero__grid {
@@ -13,9 +11,8 @@
   z-index: 2;
   display: grid;
   min-height: 650px;
-  grid-template-columns: minmax(0, 0.91fr) minmax(520px, 1.09fr);
+  grid-template-columns: minmax(0, 1fr);
   align-items: center;
-  gap: clamp(30px, 4vw, 72px);
 }
 
 .hero__content {
@@ -94,114 +91,6 @@
 
 .hero__proof svg {
   color: var(--brand-red);
-}
-
-.hero-visual {
-  position: relative;
-  height: 650px;
-  isolation: isolate;
-}
-
-.hero-visual__main {
-  position: absolute;
-  top: 5%;
-  right: 6%;
-  z-index: 3;
-  width: 75%;
-  height: 82%;
-  display: grid;
-  place-items: center;
-  border-radius: 48% 48% 8px 8px;
-  background: transparent;
-}
-
-.hero-visual__main::after {
-  content: none;
-}
-
-.hero-visual__main img {
-  width: 62%;
-  height: 92%;
-  object-fit: contain;
-  filter: drop-shadow(0 32px 26px rgba(27, 11, 11, 0.2));
-}
-
-.hero-product {
-  position: absolute;
-  z-index: 4;
-  object-fit: contain;
-  filter: drop-shadow(0 28px 22px rgba(27, 11, 11, 0.2));
-  will-change: transform;
-}
-
-.hero-product--cup {
-  bottom: 1%;
-  left: 0;
-  width: 25%;
-  height: 48%;
-  transform: rotate(-8deg);
-}
-
-.hero-product--bottle {
-  right: -1%;
-  bottom: 0;
-  width: 21%;
-  height: 51%;
-  transform: rotate(7deg);
-}
-
-.hero-product--bag {
-  right: 14%;
-  bottom: -2%;
-  z-index: 2;
-  width: 55%;
-  height: 34%;
-  opacity: 0.92;
-  transform: rotate(-2deg);
-}
-
-.hero-product--gin {
-  top: 1%;
-  right: 1%;
-  z-index: 5;
-  width: 15%;
-  height: 34%;
-  transform: rotate(9deg);
-}
-
-.hero-visual__label {
-  position: absolute;
-  top: 13%;
-  left: -3%;
-  z-index: 5;
-  display: flex;
-  width: 155px;
-  height: 155px;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid rgba(207, 31, 38, 0.22);
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 18px 38px rgba(65, 16, 19, 0.09);
-  text-align: center;
-}
-
-.hero-visual__label span,
-.hero-visual__label small {
-  color: var(--muted);
-  font-size: 0.62rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-
-.hero-visual__label strong {
-  margin: 3px 0;
-  color: var(--brand-red);
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  letter-spacing: -0.06em;
 }
 
 .hero__side-note {

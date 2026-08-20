@@ -1,7 +1,6 @@
 @media (max-width: 1180px) {
   .hero__grid {
-    grid-template-columns: minmax(0, 0.9fr) minmax(470px, 1.1fr);
-    gap: 24px;
+    grid-template-columns: minmax(0, 1fr);
   }
 
   .hero__title {
@@ -77,6 +76,7 @@
   .site-nav--open .site-nav__panel > a:not(.whatsapp-button) {
     padding: 17px 2px;
     border-bottom: 1px solid var(--line);
+    color: var(--ink);
     font-size: 1rem;
   }
 
@@ -91,12 +91,8 @@
   }
 
   .hero__grid {
-    grid-template-columns: minmax(0, 0.9fr) minmax(400px, 1.1fr);
+    grid-template-columns: minmax(0, 1fr);
     min-height: 600px;
-  }
-
-  .hero-visual {
-    height: 570px;
   }
 
   .hero__proof {
@@ -167,12 +163,6 @@
 
   .hero__proof {
     display: flex;
-  }
-
-  .hero-visual {
-    width: min(100%, 650px);
-    height: 610px;
-    margin: 5px auto 0;
   }
 
   .authority__grid {
@@ -272,15 +262,17 @@
 
   .brand__mark,
   .brand img {
-    width: 38px;
-    height: 38px;
+    width: 46px;
+    height: 46px;
+  }
+
+  .brand {
+    font-size: 1.1rem;
   }
 
   .hero {
     padding: 105px 0 125px;
-    background:
-      linear-gradient(90deg, rgba(207, 31, 38, 0.035) 1px, transparent 1px) 0 0 / 72px 100%,
-      var(--white);
+    background: url('../../assets/herotop.jpeg') right center / contain no-repeat;
   }
 
   .hero__grid {
@@ -320,37 +312,6 @@
     display: grid;
     gap: 6px;
     margin-top: 14px;
-  }
-
-  .hero-visual {
-    position: absolute;
-    top: 520px;
-    right: -4px;
-    z-index: 5;
-    width: 150px;
-    height: 245px;
-    margin: 0;
-    pointer-events: none;
-  }
-
-  .hero-visual__main,
-  .hero-visual__label {
-    display: none;
-  }
-
-  .hero-product--cup {
-    display: block;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    transform: rotate(-7deg);
-  }
-
-  .hero-product--bottle,
-  .hero-product--bag,
-  .hero-product--gin {
-    display: none;
   }
 
   .authority {
@@ -626,12 +587,6 @@
 
   .hero__title {
     font-size: 3.05rem;
-  }
-
-  .hero-visual {
-    top: 520px;
-    width: 126px;
-    height: 220px;
   }
 
   .product-story__visual {
