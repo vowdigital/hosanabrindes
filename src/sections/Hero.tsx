@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
@@ -8,9 +8,35 @@ import { WhatsAppButton } from '../components/WhatsAppButton'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
+const heroBackgroundModules = import.meta.glob('../../assets/assetsimg/img*.webp', {
+  eager: true,
+  import: 'default',
+  query: '?url',
+}) as Record<string, string>
+
+const heroBackgroundOrder = [11, 3, 17, 6, 14, 1, 8, 16, 4, 13, 9, 18, 2, 15, 7, 12]
+
+const heroBackgroundImages = heroBackgroundOrder
+  .map((imageNumber) => ({
+    id: imageNumber,
+    src: heroBackgroundModules[`../../assets/assetsimg/img${imageNumber}.webp`],
+  }))
+  .filter((image): image is { id: number; src: string } => Boolean(image.src))
+
 export const Hero = () => {
   const scope = useRef<HTMLElement>(null)
   const reducedMotion = useReducedMotion()
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  useEffect(() => {
+    if (heroBackgroundImages.length <= 1) return
+
+    const timer = window.setInterval(() => {
+      setActiveIndex((current) => (current + 1) % heroBackgroundImages.length)
+    }, 3000)
+
+    return () => window.clearInterval(timer)
+  }, [])
 
   useGSAP(() => {
     if (reducedMotion) return
@@ -33,6 +59,15 @@ export const Hero = () => {
 
   return (
     <section className="hero" id="inicio" ref={scope}>
+      <div className="hero__background" aria-hidden="true">
+        {heroBackgroundImages.map((image, index) => (
+          <div
+            key={image.id}
+            className={`hero__background-image ${index === activeIndex ? 'is-active' : ''}`}
+            style={{ backgroundImage: `url(${image.src})` }}
+          />
+        ))}
+      </div>
       <div className="container hero__grid">
         <div className="hero__content">
           <p className="eyebrow hero__eyebrow">Brindes corporativos personalizados</p>

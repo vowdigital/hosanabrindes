@@ -345,8 +345,17 @@
 
   .hero {
     min-height: auto;
-    padding: 105px 0 100vw;
-    background: url('../../assets/assetsimg/img7.webp') center bottom / 100% auto no-repeat;
+    padding: 105px 0 70px;
+    background: rgba(247, 243, 240, 0.96);
+  }
+
+  .hero::before {
+    background: transparent;
+  }
+
+  .hero__background,
+  .hero__background-image {
+    display: none !important;
   }
 
   .hero__grid {
