@@ -2,12 +2,31 @@ import { useEffect, useRef, type CSSProperties } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
-import { galleryProducts } from '../data/products'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
-const galleryRows = Array.from({ length: 4 }, () => [] as typeof galleryProducts)
+const portfolioImageModules = import.meta.glob('../../assets/assetsimg/img*.webp', {
+  eager: true,
+  import: 'default',
+  query: '?url',
+}) as Record<string, string>
+
+const portfolioImageOrder = [11, 3, 17, 6, 14, 1, 8, 16, 4, 13, 9, 18, 2, 15, 7, 12, 5, 10]
+const portfolioTones = [
+  '#f1d9d4', '#dce7f1', '#e8dfc9', '#d9eadf', '#e5d9ed', '#f3e3cb',
+  '#d5e6e5', '#f0d8df', '#e3e6d4', '#e2d8ce', '#d8e1ef', '#eeded5',
+  '#e5dce9', '#d9e8d9', '#f0dfca', '#d8e2ea', '#ead9e1', '#dfe7d2',
+]
+
+const galleryProducts = portfolioImageOrder.map((imageNumber, index) => ({
+  name: `Brinde personalizado ${imageNumber}`,
+  image: portfolioImageModules[`../../assets/assetsimg/img${imageNumber}.webp`],
+  alt: 'Brinde personalizado para empresas',
+  background: portfolioTones[index],
+}))
+
+const galleryRows = Array.from({ length: 3 }, () => [] as typeof galleryProducts)
 galleryProducts.forEach((product, index) => galleryRows[index % galleryRows.length].push(product))
 
 export const Portfolio = () => {
@@ -122,7 +141,7 @@ export const Portfolio = () => {
         <h2 className="section-title">Sua marca em novas cores e formatos.</h2>
       </div>
 
-      <div className="portfolio-marquee" aria-label="Galeria completa de produtos">
+      <div className="portfolio-marquee" aria-label="Três carrosséis com produtos personalizados">
         {galleryRows.map((row, rowIndex) => (
           <div
             className="portfolio-marquee__viewport"
