@@ -2,12 +2,81 @@ import { useEffect, useRef, useState, type CSSProperties } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
-import { products } from '../data/products'
+import { products } from '../data/portfolio'
 import { useReducedMotion } from '../hooks/useReducedMotion'
 import { pushDataLayer } from '../lib/tracking'
 import { WhatsAppButton } from '../components/WhatsAppButton'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
+
+type PortfolioProduct = (typeof products)[number]
+
+const ProductGallery = ({ product, eager }: { product: PortfolioProduct; eager: boolean }) => {
+  const [activeImage, setActiveImage] = useState(0)
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setActiveImage((current) => (current + 1) % product.images.length)
+    }, 3000)
+
+    return () => window.clearTimeout(timer)
+  }, [activeImage, product.images.length])
+
+  const moveImage = (direction: number) => {
+    setActiveImage((current) => (current + direction + product.images.length) % product.images.length)
+  }
+
+  return (
+    <div className="product-story__gallery">
+      <div className="product-story__images" aria-label={`Galeria de ${product.name}`}>
+      <div
+        className="product-story__image-track"
+        style={{ transform: `translate3d(-${activeImage * 100}%, 0, 0)` }}
+      >
+        {product.images.map((image, imageIndex) => (
+          <div className="product-story__image-slide" key={image} aria-hidden={imageIndex !== activeImage}>
+            <img
+              className="product-story__image"
+              src={image}
+              alt={`${product.alt} ${imageIndex + 1}`}
+              loading={eager && imageIndex === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+          </div>
+        ))}
+      </div>
+      </div>
+      <button
+        className="product-story__image-control product-story__image-control--previous"
+        type="button"
+        onClick={() => moveImage(-1)}
+        aria-label={`Ver imagem anterior de ${product.name}`}
+      >
+        <span aria-hidden="true">←</span>
+      </button>
+      <button
+        className="product-story__image-control product-story__image-control--next"
+        type="button"
+        onClick={() => moveImage(1)}
+        aria-label={`Ver próxima imagem de ${product.name}`}
+      >
+        <span aria-hidden="true">→</span>
+      </button>
+      <div className="product-story__image-dots" role="group" aria-label={`Selecionar imagem de ${product.name}`}>
+        {product.images.map((_, imageIndex) => (
+          <button
+            className={imageIndex === activeImage ? 'is-active' : ''}
+            type="button"
+            key={imageIndex}
+            onClick={() => setActiveImage(imageIndex)}
+            aria-label={`Ver imagem ${imageIndex + 1} de ${product.name}`}
+            aria-pressed={imageIndex === activeImage}
+          />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export const Products = () => {
   const scope = useRef<HTMLElement>(null)
@@ -105,26 +174,6 @@ export const Products = () => {
           setActive(closestIndex)
         }
 
-        let backgroundColor = products[closestIndex].backgroundColor
-
-        if (!reducedMotion) {
-          for (let index = 0; index < cardCenters.length - 1; index += 1) {
-            const currentCenter = cardCenters[index]
-            const nextCenter = cardCenters[index + 1]
-
-            if (viewportFocus >= currentCenter && viewportFocus <= nextCenter) {
-              const progress = gsap.utils.clamp(0, 1, (viewportFocus - currentCenter) / (nextCenter - currentCenter))
-              backgroundColor = gsap.utils.interpolate(
-                products[index].backgroundColor,
-                products[index + 1].backgroundColor,
-                progress,
-              )
-              break
-            }
-          }
-        }
-
-        if (scope.current) scope.current.style.backgroundColor = backgroundColor
       }
 
       const trigger = ScrollTrigger.create({
@@ -165,26 +214,6 @@ export const Products = () => {
         pushDataLayer('product_view', { product_id: products[closestIndex].id, product_name: products[closestIndex].name })
       }
 
-      let backgroundColor = products[closestIndex].backgroundColor
-
-      if (!reducedMotion) {
-        for (let index = 0; index < cardCenters.length - 1; index += 1) {
-          const currentCenter = cardCenters[index]
-          const nextCenter = cardCenters[index + 1]
-
-          if (viewportFocus >= currentCenter && viewportFocus <= nextCenter) {
-            const progress = gsap.utils.clamp(0, 1, (viewportFocus - currentCenter) / (nextCenter - currentCenter))
-            backgroundColor = gsap.utils.interpolate(
-              products[index].backgroundColor,
-              products[index + 1].backgroundColor,
-              progress,
-            )
-            break
-          }
-        }
-      }
-
-      if (scope.current) scope.current.style.backgroundColor = backgroundColor
     }
 
     const handleScroll = () => syncActiveProduct()
@@ -212,7 +241,6 @@ export const Products = () => {
       id="produtos"
       ref={scope}
       style={{
-        '--products-background': products[active].backgroundColor,
         '--products-accent': products[active].accentColor,
       } as CSSProperties}
     >
@@ -241,21 +269,14 @@ export const Products = () => {
         >
           {products.map((product, index) => (
             <article
-              className={`product-story ${active === index ? 'is-active' : ''} ${!product.image ? 'product-story--type' : ''}`}
+              className={`product-story ${active === index ? 'is-active' : ''}`}
               id={`produto-${product.id}`}
               key={product.id}
               style={{ '--story-accent': product.accentColor } as CSSProperties}
             >
-              <div className={`product-story__visual product-story__visual--${product.imageFit || 'contain'}`}>
+              <div className="product-story__visual">
                 <span className="product-story__number">0{index + 1}</span>
-                {product.image ? (
-                  <img src={product.image} alt={product.alt} loading={index === 0 ? 'eager' : 'lazy'} decoding="async" />
-                ) : (
-                  <div className="product-story__typographic" aria-hidden="true">
-                    <span>{product.shortName.split(' ')[0]}</span>
-                    <strong>{product.shortName.split(' ').slice(1).join(' ')}</strong>
-                  </div>
-                )}
+                <ProductGallery product={product} eager={index === 0} />
                 <span className="product-story__category">{product.category}</span>
               </div>
               <div className="product-story__body">

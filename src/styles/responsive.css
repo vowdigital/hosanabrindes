@@ -117,10 +117,6 @@
     min-height: 530px;
   }
 
-  .product-story__visual img {
-    height: 430px;
-  }
-
   .product-story__body {
     grid-template-columns: 1fr;
   }
@@ -279,10 +275,6 @@
   .product-story__visual {
     height: 330px;
     min-height: 330px;
-  }
-
-  .product-story__visual img {
-    height: 280px;
   }
 
   .acrylic-feature__media {
@@ -453,11 +445,6 @@
   .product-story__visual {
     height: 300px;
     min-height: 300px;
-  }
-
-  .product-story__visual img {
-    width: 84%;
-    height: 250px;
   }
 
   .product-story__visual--cover img {
@@ -694,10 +681,6 @@
 
   .product-story__visual {
     min-height: 420px;
-  }
-
-  .product-story__visual img {
-    height: 335px;
   }
 
 }
