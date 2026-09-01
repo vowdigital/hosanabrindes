@@ -346,7 +346,7 @@
   .hero {
     min-height: auto;
     padding: 105px 0 100vw;
-    background: url('../../assets/herotop.jpeg') center bottom / 100% auto no-repeat;
+    background: url('../../assets/assetsimg/img7.webp') center bottom / 100% auto no-repeat;
   }
 
   .hero__grid {

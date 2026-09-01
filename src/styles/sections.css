@@ -3,7 +3,7 @@
   min-height: min(900px, 100svh);
   padding: clamp(118px, 12vh, 152px) 0 70px;
   overflow: hidden;
-  background: url('../../assets/herotop.jpeg') right center / contain no-repeat;
+  background: url('../../assets/assetsimg/img7.webp') right center / contain no-repeat;
 }
 
 .hero__grid {
