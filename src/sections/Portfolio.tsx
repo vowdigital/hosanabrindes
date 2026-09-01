@@ -1,4 +1,4 @@
-import { useEffect, useRef, type CSSProperties } from 'react'
+import { useEffect, useRef } from 'react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
@@ -13,17 +13,10 @@ const portfolioImageModules = import.meta.glob('../../assets/assetsimg/img*.webp
 }) as Record<string, string>
 
 const portfolioImageOrder = [11, 3, 17, 6, 14, 1, 8, 16, 4, 13, 9, 18, 2, 15, 7, 12, 5, 10]
-const portfolioTones = [
-  '#f1d9d4', '#dce7f1', '#e8dfc9', '#d9eadf', '#e5d9ed', '#f3e3cb',
-  '#d5e6e5', '#f0d8df', '#e3e6d4', '#e2d8ce', '#d8e1ef', '#eeded5',
-  '#e5dce9', '#d9e8d9', '#f0dfca', '#d8e2ea', '#ead9e1', '#dfe7d2',
-]
-
-const galleryProducts = portfolioImageOrder.map((imageNumber, index) => ({
+const galleryProducts = portfolioImageOrder.map((imageNumber) => ({
   name: `Brinde personalizado ${imageNumber}`,
   image: portfolioImageModules[`../../assets/assetsimg/img${imageNumber}.webp`],
   alt: 'Brinde personalizado para empresas',
-  background: portfolioTones[index],
 }))
 
 const galleryRows = Array.from({ length: 3 }, () => [] as typeof galleryProducts)
@@ -152,11 +145,7 @@ export const Portfolio = () => {
               {[0, 1].map((copy) => (
                 <div className="portfolio-marquee__group" key={copy} aria-hidden={copy === 1}>
                   {row.map((item) => (
-                    <figure
-                      className="portfolio-card"
-                      key={`${item.name}-${copy}`}
-                      style={{ '--portfolio-tone': item.background } as CSSProperties}
-                    >
+                    <figure className="portfolio-card" key={`${item.name}-${copy}`}>
                       <img
                         data-gallery-src={item.image}
                         loading="lazy"

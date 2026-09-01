@@ -1023,7 +1023,7 @@
   padding-top: clamp(70px, 7vw, 104px);
   margin-bottom: 0 !important;
   padding-bottom: 0 !important;
-  background: linear-gradient(180deg, var(--white), #fffafa);
+  background: var(--white);
 }
 
 .section.portfolio + .final-cta {
@@ -1094,8 +1094,7 @@
   margin: 0;
   overflow: hidden;
   contain: layout paint;
-  background: var(--portfolio-tone, var(--surface));
-  background: color-mix(in srgb, var(--portfolio-tone, var(--surface)) 84%, var(--ink) 16%);
+  background: var(--white);
 }
 
 .portfolio-card img {
