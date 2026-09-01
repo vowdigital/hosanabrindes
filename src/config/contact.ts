@@ -1,6 +1,6 @@
 export const CONTACT = {
-  whatsapp: '5544991795688',
-  whatsappDisplay: '(44) 99179-5688',
+  whatsapp: '554491094570',
+  whatsappDisplay: '+55 44 9109-4570',
   instagram: 'hosanabrindes',
   site: 'https://hosanabrindes.com.br',
 } as const
