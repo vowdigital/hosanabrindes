@@ -38,7 +38,7 @@ const ProductGallery = ({ product, eager }: { product: PortfolioProduct; eager: 
             <img
               className="product-story__image"
               src={image}
-              alt={`${product.alt} ${imageIndex + 1}`}
+              alt={product.alts[imageIndex]}
               loading={eager && imageIndex === 0 ? 'eager' : 'lazy'}
               decoding="async"
             />
@@ -239,6 +239,7 @@ export const Products = () => {
     <section
       className="section products"
       id="produtos"
+      aria-labelledby="produtos-titulo"
       ref={scope}
       style={{
         '--products-accent': products[active].accentColor,
@@ -246,8 +247,8 @@ export const Products = () => {
     >
       <div className="container products__layout">
         <div className="products__intro">
-          <p className="eyebrow">Portfólio corporativo</p>
-          <h2 className="section-title">O brinde certo para cada momento da sua marca.</h2>
+          <h2 className="eyebrow" id="produtos-titulo">Portfólio corporativo</h2>
+          <p className="section-title">O brinde certo para cada momento da sua marca.</p>
           <p className="section-lead">Produtos pensados para ações de RH, marketing, eventos e relacionamento — com escala e personalização profissional.</p>
           <ol className="products__index" aria-label="Produtos em destaque">
             {products.map((product, index) => (

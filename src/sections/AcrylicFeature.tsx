@@ -10,32 +10,32 @@ import canivete from '../../assets/canivete.jpeg'
 const mosaicItems = [
   {
     image: copoUm,
-    alt: 'Copo personalizado para ações corporativas',
+    alt: 'Copo personalizado com identidade visual para ação corporativa',
   },
   {
     image: garrafaUm,
-    alt: 'Garrafa térmica branca personalizada',
+    alt: 'Garrafa térmica branca personalizada com nome',
   },
   {
     image: doiscopos,
-    alt: 'Dois copos personalizados',
+    alt: 'Dois copos térmicos personalizados',
   },
   {
     image: garrafaAzul,
-    alt: 'Garrafa azul personalizada',
+    alt: 'Garrafa azul personalizada com gravação a laser',
   },
   {
     image: facas,
-    alt: 'Facas personalizadas',
+    alt: 'Facas personalizadas com gravação a laser',
   },
   {
     image: canivete,
-    alt: 'Canivete personalizado',
+    alt: 'Canivete personalizado com gravação a laser',
   },
 ]
 
 export const AcrylicFeature = () => (
-  <section className="section acrylic-feature" id="produtos-personalizados">
+  <section className="section acrylic-feature" id="produtos-personalizados" aria-labelledby="produtos-personalizados-titulo">
     <div className="container acrylic-feature__grid">
       <div className="acrylic-feature__media product-mosaic" data-reveal="clip" aria-label="Mosaico de produtos personalizados">
         {mosaicItems.map((item) => (
@@ -46,8 +46,8 @@ export const AcrylicFeature = () => (
       </div>
 
       <div className="acrylic-feature__content" data-reveal>
-        <p className="eyebrow">Produtos personalizados</p>
-        <h2 className="section-title">Sua marca presente em diferentes momentos.</h2>
+        <h2 className="eyebrow" id="produtos-personalizados-titulo">Produtos personalizados</h2>
+        <p className="section-title">Sua marca presente em diferentes momentos.</p>
         <p className="section-lead">Produtos personalizados para empresas, eventos e ações promocionais, desenvolvidos para colocar a identidade da sua marca em circulação todos os dias.</p>
         <ul className="check-list">
           <li><CheckIcon /> Diversos produtos e categorias</li>

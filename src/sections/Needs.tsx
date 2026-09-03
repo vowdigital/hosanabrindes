@@ -29,12 +29,12 @@ const needs = [
 ]
 
 export const Needs = () => (
-  <section className="section needs">
+  <section className="section needs" id="objetivos" aria-labelledby="objetivos-titulo">
     <div className="container">
       <div className="needs__heading" data-reveal>
         <div>
           <p className="eyebrow">Comece pelo objetivo</p>
-          <h2 className="section-title">O que sua empresa quer colocar em movimento?</h2>
+          <h2 className="section-title" id="objetivos-titulo">O que sua empresa quer colocar em movimento?</h2>
         </div>
         <p className="section-lead">A escolha fica mais simples quando o produto nasce do contexto certo.</p>
       </div>

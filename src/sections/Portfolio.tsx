@@ -3,6 +3,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useGSAP } from '@gsap/react'
 import { useReducedMotion } from '../hooks/useReducedMotion'
+import { portfolioImageAlts } from '../data/portfolio'
 
 gsap.registerPlugin(ScrollTrigger, useGSAP)
 
@@ -16,7 +17,7 @@ const portfolioImageOrder = [11, 3, 17, 6, 14, 1, 8, 16, 4, 13, 9, 18, 2, 15, 7,
 const galleryProducts = portfolioImageOrder.map((imageNumber) => ({
   name: `Brinde personalizado ${imageNumber}`,
   image: portfolioImageModules[`../../assets/assetsimg/img${imageNumber}.webp`],
-  alt: 'Brinde personalizado para empresas',
+  alt: portfolioImageAlts[imageNumber],
 }))
 
 const galleryRows = Array.from({ length: 3 }, () => [] as typeof galleryProducts)
@@ -128,10 +129,10 @@ export const Portfolio = () => {
   }, { scope, dependencies: [reducedMotion], revertOnUpdate: true })
 
   return (
-    <section className="section portfolio" id="portfolio" ref={scope}>
+    <section className="section portfolio" id="portfolio" ref={scope} aria-labelledby="portfolio-titulo">
       <div className="container portfolio__heading" data-reveal>
-        <p className="eyebrow">Mais itens do nosso acervo</p>
-        <h2 className="section-title">Sua marca em novas cores e formatos.</h2>
+        <h2 className="eyebrow" id="portfolio-titulo">Mais itens do nosso acervo</h2>
+        <p className="section-title">Sua marca em novas cores e formatos.</p>
       </div>
 
       <div className="portfolio-marquee" aria-label="Três carrosséis com produtos personalizados">

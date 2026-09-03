@@ -57,7 +57,7 @@ export const FinalCTA = () => {
   }, { scope, dependencies: [reducedMotion], revertOnUpdate: true })
 
   return (
-    <section className="final-cta" ref={scope}>
+    <section className="final-cta" id="orcamento" ref={scope} aria-labelledby="orcamento-titulo">
       <div className="container final-cta__inner">
         <img
           className="final-cta__product final-cta__product--left"
@@ -66,11 +66,12 @@ export const FinalCTA = () => {
           decoding="async"
           width="1183"
           height="2154"
-          alt="Copo térmico branco"
+          alt=""
+          aria-hidden="true"
         />
         <div className="final-cta__content" data-reveal>
           <p className="eyebrow">Sua próxima ação começa aqui</p>
-          <h2>Vamos colocar sua marca em circulação?</h2>
+          <h2 id="orcamento-titulo">Vamos colocar sua marca em circulação?</h2>
           <p>Conte o que sua empresa precisa e receba um orçamento personalizado.</p>
           <WhatsAppButton
             location="final_cta"
@@ -83,7 +84,8 @@ export const FinalCTA = () => {
           decoding="async"
           width="970"
           height="2678"
-          alt="Garrafa térmica em tom tiffany"
+          alt=""
+          aria-hidden="true"
         />
       </div>
     </section>

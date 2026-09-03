@@ -8,7 +8,7 @@ const stats = [
 ]
 
 export const Authority = () => (
-  <section className="authority" aria-label="Números da Hosana Brindes">
+  <section className="authority" id="numeros" aria-label="Números da Hosana Brindes">
     <div className="container authority__grid">
       {stats.map((stat) => (
         <div className="authority__stat" key={stat.label} data-reveal>

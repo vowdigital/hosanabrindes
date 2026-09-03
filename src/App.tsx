@@ -11,6 +11,7 @@ import { Portfolio } from './sections/Portfolio'
 import { FinalCTA } from './sections/FinalCTA'
 import { FAQSection } from './sections/FAQSection'
 import { Footer } from './sections/Footer'
+import { StructuredData } from './components/StructuredData'
 import './styles/components.css'
 import './styles/sections.css'
 import './styles/responsive.css'
@@ -20,6 +21,7 @@ function App() {
 
   return (
     <>
+      <StructuredData />
       <a className="skip-link" href="#conteudo">Pular para o conteúdo</a>
       <Header />
       <MotionController>

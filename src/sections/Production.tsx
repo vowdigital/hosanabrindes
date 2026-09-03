@@ -113,11 +113,11 @@ export const Production = () => {
   const activeTechnique = techniques[active]
 
   return (
-    <section className="section production" id="producao" ref={scope}>
-      <div className="container production__top">
+    <section className="section production" id="producao" ref={scope} aria-labelledby="producao-titulo">
+      <div className="container production__top" id="diferenciais">
         <div data-reveal>
-          <p className="eyebrow">Produção própria · não somos revenda</p>
-          <h2 className="section-title">Aqui, a personalização acontece dentro de casa.</h2>
+          <h2 className="eyebrow" id="producao-titulo">Produção própria · não somos revenda</h2>
+          <p className="section-title">Aqui, a personalização acontece dentro de casa.</p>
         </div>
         <p className="section-lead" data-reveal>A Hosana executa diferentes processos internamente, ampliando o controle sobre qualidade, acabamento e produção.</p>
       </div>

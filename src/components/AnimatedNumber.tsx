@@ -30,6 +30,7 @@ export const AnimatedNumber = ({ value, prefix = '', suffix = '', decimals = 0 }
       return
     }
 
+    element.current.textContent = format(0)
     const counter = { value: 0 }
     const animation = gsap.to(counter, {
       value,
@@ -45,5 +46,5 @@ export const AnimatedNumber = ({ value, prefix = '', suffix = '', decimals = 0 }
     return () => animation.kill()
   }, { dependencies: [value, prefix, suffix, decimals, reducedMotion] })
 
-  return <span ref={element}>{reducedMotion ? format(value) : format(0)}</span>
+  return <span ref={element}>{format(value)}</span>
 }

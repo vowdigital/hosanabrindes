@@ -58,7 +58,7 @@ export const Hero = () => {
   }, { scope, dependencies: [reducedMotion], revertOnUpdate: true })
 
   return (
-    <section className="hero" id="inicio" ref={scope}>
+    <section className="hero" id="inicio" ref={scope} aria-labelledby="inicio-titulo">
       <div className="hero__background" aria-hidden="true">
         {heroBackgroundImages.map((image, index) => (
           <div
@@ -70,12 +70,12 @@ export const Hero = () => {
       </div>
       <div className="container hero__grid">
         <div className="hero__content">
-          <p className="eyebrow hero__eyebrow">Brindes corporativos personalizados</p>
-          <h1 className="hero__title">
+          <h1 className="eyebrow hero__eyebrow" id="inicio-titulo">Brindes corporativos personalizados</h1>
+          <p className="hero__title">
             <span className="hero__title-line"><span>Sua marca</span></span>
             <span className="hero__title-line"><span>nas mãos de</span></span>
             <span className="hero__title-line hero__title-line--red"><span>quem importa.</span></span>
-          </h1>
+          </p>
           <p className="hero__intro">
             Brindes personalizados com <strong>produção própria</strong>, atendimento para empresas e envio para todo o Brasil.
           </p>
